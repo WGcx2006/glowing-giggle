@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# pnpm
+.pnpm-store/
+
+# Logs and local debug output
+vite*.log
+*.log
+debug-shot.png
+
+# Generated screenshots (regenerate with scripts/visual-review.mjs)
+public/screenshots/
+
+# Local engine installs and tool binaries
+.tools/
+
+# Godot editor cache and local runtime artifacts
+.godot-appdata/
+.godot-bin/
+.godot-local/
+godot/.godot/
+godot/screenshots/
+
+# Local process ids
+*.pid
+
+# OS noise
+.DS_Store
+Thumbs.db

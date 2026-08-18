@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>视觉盲测</title>
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: #0b0f12;
+        color: #e8f1ea;
+        font-family: "Microsoft YaHei", "Segoe UI", Arial, sans-serif;
+      }
+      header {
+        padding: 22px 28px;
+        border-bottom: 1px solid rgba(255,255,255,0.12);
+        display: flex;
+        align-items: baseline;
+        gap: 18px;
+      }
+      header h1 { margin: 0; font-size: 22px; letter-spacing: 4px; }
+      header span { opacity: 0.65; font-size: 13px; }
+      main {
+        max-width: 1560px;
+        margin: 0 auto;
+        padding: 28px;
+      }
+      .stage { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+      .option {
+        position: relative;
+        border: 1px solid rgba(255,255,255,0.18);
+        background: #11181c;
+        cursor: pointer;
+        overflow: hidden;
+      }
+      .option img { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; }
+      .option .label {
+        position: absolute;
+        left: 14px;
+        top: 12px;
+        width: 52px;
+        height: 52px;
+        display: grid;
+        place-items: center;
+        background: rgba(5,8,10,0.72);
+        border: 1px solid rgba(255,255,255,0.5);
+        font-size: 24px;
+        font-weight: 800;
+        letter-spacing: 1px;
+      }
+      .option:hover { border-color: #7dffb0; box-shadow: 0 0 0 2px rgba(125,255,176,0.25); }
+      .option.revealed { cursor: default; }
+      .result {
+        position: absolute;
+        right: 14px;
+        bottom: 12px;
+        padding: 8px 14px;
+        background: rgba(5,8,10,0.78);
+        border-left: 3px solid #7dffb0;
+        font-size: 14px;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .option.revealed .result { opacity: 1; }
+      .controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 18px;
+        min-height: 46px;
+      }
+      button {
+        padding: 10px 24px;
+        background: #17261f;
+        color: #eafff3;
+        border: 1px solid rgba(140,255,190,0.45);
+        font-size: 15px;
+        cursor: pointer;
+      }
+      button:disabled { opacity: 0.4; cursor: default; }
+      #tally { font-size: 14px; opacity: 0.85; }
+      @media (max-width: 760px) {
+        .stage { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>视觉盲测</h1>
+      <span>请凭直觉选择视觉效果更优的一张，标签会在选择后揭示</span>
+    </header>
+    <main>
+      <div class="stage" id="stage"></div>
+      <div class="controls">
+        <div id="tally"></div>
+        <button id="next" disabled>下一组</button>
+      </div>
+    </main>
+    <script>
+      const stage = document.getElementById('stage');
+      const nextBtn = document.getElementById('next');
+      const tally = document.getElementById('tally');
+      let pairs = [];
+      let index = 0;
+      let scores = { ultra: 0, medium: 0 };
+
+      async function init() {
+        const res = await fetch('/screenshots/manifest.json');
+        const data = await res.json();
+        pairs = data.pairs;
+        render();
+      }
+
+      function render() {
+        const pair = pairs[index];
+        stage.innerHTML = '';
+        tally.textContent = `第 ${index + 1} / ${pairs.length} 组 · Ultra ${scores.ultra} · Medium ${scores.medium}`;
+        nextBtn.disabled = true;
+        for (const key of ['a', 'b']) {
+          const item = pair[key];
+          const option = document.createElement('div');
+          option.className = 'option';
+          option.dataset.key = key;
+          const img = document.createElement('img');
+          img.src = `/screenshots/${item.file}`;
+          img.alt = key.toUpperCase();
+          const label = document.createElement('div');
+          label.className = 'label';
+          label.textContent = key.toUpperCase();
+          const result = document.createElement('div');
+          result.className = 'result';
+          result.textContent = item.label;
+          option.append(img, label, result);
+          option.addEventListener('click', () => choose(key));
+          stage.appendChild(option);
+        }
+      }
+
+      function choose(key) {
+        const pair = pairs[index];
+        const chosen = pair[key].label.toLowerCase();
+        scores[chosen] += 1;
+        document.querySelectorAll('.option').forEach((el) => {
+          el.classList.add('revealed');
+          el.querySelector('.result').textContent = pair[el.dataset.key].label;
+        });
+        nextBtn.disabled = false;
+      }
+
+      nextBtn.addEventListener('click', () => {
+        index += 1;
+        if (index >= pairs.length) {
+          const winner = scores.ultra >= scores.medium ? 'Ultra' : 'Medium';
+          stage.innerHTML = `<div style="grid-column:1/-1;padding:60px;text-align:center;font-size:24px;border:1px solid rgba(255,255,255,.2)">
+            盲测完成：Ultra ${scores.ultra} 票，Medium ${scores.medium} 票，胜者是 ${winner}
+          </div>`;
+          nextBtn.disabled = true;
+          return;
+        }
+        render();
+      });
+
+      init();
+    </script>
+  </body>
+</html>

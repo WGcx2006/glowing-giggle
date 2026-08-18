@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/render/environment.gd" id="1_env"]
+[ext_resource type="Script" path="res://scripts/render/terrain.gd" id="2_terrain"]
+[ext_resource type="Script" path="res://scripts/render/sky.gd" id="3_sky"]
+[ext_resource type="Script" path="res://scripts/render/postfx.gd" id="4_postfx"]
+
+[node name="Environment" type="Node3D"]
+script = ExtResource("1_env")
+
+[node name="Terrain" type="StaticBody3D" parent="."]
+script = ExtResource("2_terrain")
+
+[node name="Sky" type="Node3D" parent="."]
+script = ExtResource("3_sky")
+
+[node name="PostFX" type="WorldEnvironment" parent="."]
+script = ExtResource("4_postfx")

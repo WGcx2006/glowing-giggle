@@ -1,0 +1,5 @@
+.godot/
+*.import
+*.log
+screenshots/
+export/

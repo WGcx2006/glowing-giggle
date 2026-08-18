@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>战地风云2035</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="hud" class="hidden">
+      <div id="crosshair"></div>
+      <div id="health-wrap">
+        <div id="health-bar"></div>
+        <span id="health-text">100</span>
+      </div>
+      <div id="ammo-wrap">
+        <span id="weapon-name">突击步枪</span>
+        <span id="ammo-text">30 / 120</span>
+      </div>
+      <div id="objective">守住前哨阵地</div>
+      <div id="killfeed"></div>
+      <div id="damage-overlay"></div>
+      <div id="compass"></div>
+    </div>
+    <div id="menu">
+      <h1>战地风云 2035</h1>
+      <p>前线已经失守。夺回阵地，击退敌方攻势。</p>
+      <label class="menu-setting">鼠标灵敏度
+        <input id="sensitivity-slider" type="range" min="0.4" max="1.6" step="0.1" value="1" />
+      </label>
+      <button id="start-btn">进入战场</button>
+      <div id="menu-notes"></div>
+    </div>
+    <div id="death-screen" class="hidden">
+      <h2>你已阵亡</h2>
+      <button id="respawn-btn">重新部署</button>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

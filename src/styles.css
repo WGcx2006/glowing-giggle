@@ -1,0 +1,214 @@
+:root {
+  --hud-green: #7dffb0;
+  --hud-orange: #ff9a3c;
+  --hud-red: #ff4444;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #070b10;
+  color: #e8f1ea;
+  font-family: "Microsoft YaHei", "Segoe UI", Arial, sans-serif;
+  user-select: none;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hidden {
+  display: none !important;
+}
+
+#hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+#crosshair {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+
+#health-wrap {
+  position: absolute;
+  left: 28px;
+  bottom: 26px;
+  width: 240px;
+}
+
+#health-bar {
+  height: 8px;
+  background: linear-gradient(90deg, #d43b3b, #ffb14d);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 0 12px rgba(255, 80, 60, 0.5);
+  transition: width 0.2s;
+}
+
+#health-text {
+  position: absolute;
+  right: 0;
+  top: -20px;
+  font-size: 20px;
+  font-weight: 700;
+  text-shadow: 0 1px 3px #000;
+}
+
+#ammo-wrap {
+  position: absolute;
+  right: 28px;
+  bottom: 26px;
+  text-align: right;
+}
+
+#weapon-name {
+  display: block;
+  font-size: 12px;
+  opacity: 0.75;
+  text-shadow: 0 1px 2px #000;
+}
+
+#ammo-text {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 4px #000;
+}
+
+#objective {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 14px;
+  background: rgba(10, 18, 14, 0.62);
+  border-left: 3px solid var(--hud-orange);
+  font-size: 14px;
+  letter-spacing: 2px;
+  backdrop-filter: blur(4px);
+}
+
+#killfeed {
+  position: absolute;
+  right: 22px;
+  top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  text-align: right;
+}
+
+#killfeed div {
+  background: rgba(0, 0, 0, 0.45);
+  padding: 4px 8px;
+  animation: feed-in 0.2s ease-out;
+}
+
+#damage-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(180, 20, 20, 0.55) 100%);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+#compass {
+  position: absolute;
+  bottom: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  height: 18px;
+  background: rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+#compass span {
+  position: absolute;
+  top: 2px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+#menu,
+#death-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background: radial-gradient(ellipse at 30% 20%, rgba(32, 62, 58, 0.4), rgba(4, 8, 12, 0.94));
+}
+
+#menu h1 {
+  font-size: clamp(38px, 7vw, 76px);
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 30px rgba(120, 220, 180, 0.35), 0 4px 12px #000;
+}
+
+#menu p {
+  max-width: 520px;
+  text-align: center;
+  color: rgba(230, 240, 235, 0.75);
+  line-height: 1.7;
+}
+
+.menu-setting {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(230, 240, 235, 0.8);
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.menu-setting input {
+  width: 220px;
+  accent-color: #7dffb0;
+}
+
+button {
+  pointer-events: auto;
+  padding: 12px 36px;
+  background: rgba(20, 34, 30, 0.85);
+  color: #eafff3;
+  border: 1px solid rgba(140, 255, 190, 0.45);
+  font-size: 16px;
+  letter-spacing: 4px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+button:hover {
+  background: rgba(70, 130, 100, 0.85);
+  box-shadow: 0 0 24px rgba(110, 255, 170, 0.3);
+}
+
+@keyframes feed-in {
+  from { transform: translateX(14px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}

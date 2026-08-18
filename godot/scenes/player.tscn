@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/gameplay/player.gd" id="1_player"]
+[ext_resource type="Script" path="res://scripts/gameplay/weapons.gd" id="2_weapons"]
+[ext_resource type="Script" path="res://scripts/gameplay/projectiles.gd" id="3_projectiles"]
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 1
+floor_snap_length = 0.2
+script = ExtResource("1_player")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+current = true
+fov = 75.0
+near = 0.05
+
+[node name="WeaponViewmodel" type="Node3D" parent="Camera3D"]
+script = ExtResource("2_weapons")
+
+[node name="Projectiles" type="Node3D" parent="."]
+script = ExtResource("3_projectiles")
